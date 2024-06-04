@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classificador de Imagens</title>
+</head>
+<body>
+    <h1>Classificador de Imagens</h1>
+    <form action="/classify" method="post" enctype="multipart/form-data">
+        <label for="model">Escolha o Modelo:</label>
+        <select name="model" id="model">
+            <option value="Modelo_S_Data_Augmentation">Modelo S Data Augmentation</option>
+            <option value="Modelo_S">Modelo S</option>
+        </select>
+        <br><br>
+        <input type="file" name="file" id="file">
+        <br><br>
+        <input type="submit" value="Classificar">
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('/classify', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('result').innerText = `Resultado: ${result.result}`;
+        });
+    </script>
+</body>
+</html>
