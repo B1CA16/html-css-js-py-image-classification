@@ -1,18 +1,18 @@
-# Como Usar
+# How to Use
 
-### Clonar o Repositório
+### Clone the Repository
 ```
 git clone https://github.com/B1CA16/html-css-py-image-classification
 ```
-### Instalar Dependências
+### Install Dependencies
 
-Este programa requer Flask para ser executado.
+This program requires Flask to run.
 ```
 pip install flask
 ```
-### Executar o Programa
+### Run the Program
 
-Executar a aplicação e abrir o servidor local no Browser.
+Run the application and open the local server in the Browser.
 ```
 python app.py
 ```
