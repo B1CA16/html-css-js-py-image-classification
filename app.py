@@ -4,7 +4,6 @@ from tensorflow.keras.preprocessing import image
 import numpy as np
 import io
 from PIL import Image
-import numpy as np
 
 app = Flask(__name__)
 
@@ -24,6 +23,19 @@ models = {
 def index():
     return render_template('index.html')
 
+class_dict = {
+    0: 'Airplane',
+    1: 'Automobile',
+    2: 'Bird',
+    3: 'Cat',
+    4: 'Deer',
+    5: 'Dog',
+    6: 'Frog',
+    7: 'Horse',
+    8: 'Ship',
+    9: 'Truck'
+}
+
 @app.route('/classify', methods=['POST'])
 def classify():
     if 'file' not in request.files:
@@ -41,9 +53,8 @@ def classify():
         # Pré-processar a imagem
         img_array = image.img_to_array(img)
         img_array = np.expand_dims(img_array, axis=0)
-        img_array /= 255.0
 
-        print("Imagem pré-processada:", img_array.shape, img_array[0, 0, 0, :])  # Depuração
+        print("Imagem pré-processada (shape, primeira linha):", img_array.shape, img_array[0, 0, :, :])  # Depuração detalhada
 
         # Selecionar o modelo
         model_name = request.form.get('model')
@@ -52,11 +63,15 @@ def classify():
         if model:
             # Classificar a imagem
             prediction = model.predict(img_array)
-            print("Predição bruta:", prediction)  # Depuração
+            print("Predição bruta:", prediction)  # Depuração detalhada
+
+            # Verifique os valores de predição
+            print("Valores de predição (máx, mín):", np.max(prediction), np.min(prediction))
 
             # Aqui você pode ajustar a forma como o resultado é retornado
             result = np.argmax(prediction, axis=1)[0]
-            return jsonify({'result': int(result)})
+            print("Resultado:", result) 
+            return jsonify({'result': class_dict[int(result)]})
 
     return jsonify({'error': 'Failed to classify'})
 

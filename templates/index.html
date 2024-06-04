@@ -4,21 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classificador de Imagens</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: rgb(17, 17, 17);
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card {
+        background-color: rgb(27, 27, 27);
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        color: rgb(214, 214, 214);
+        font-size: 16px;
+    }
+
+    .title {
+        color: white;
+        margin-bottom: 40px;
+    }
+
+    input {
+        border: 0;
+        padding: .5rem 1rem;
+        border-radius: 2rem;
+        font-size: 16px;
+    }
+
+    input:hover {
+        cursor: pointer;
+    }
+
+    #result {
+        margin-top: 20px;
+    }
+
+</style>
 <body>
-    <h1>Classificador de Imagens</h1>
-    <form action="/classify" method="post" enctype="multipart/form-data">
-        <label for="model">Escolha o Modelo:</label>
-        <select name="model" id="model">
-            <option value="Modelo_S_Data_Augmentation">Modelo S Data Augmentation</option>
-            <option value="Modelo_S">Modelo S</option>
-        </select>
-        <br><br>
-        <input type="file" name="file" id="file">
-        <br><br>
-        <input type="submit" value="Classificar">
-    </form>
-    <div id="result"></div>
+    <div class="card">
+        <h1 class="title">Classificador de Imagens</h1>
+        <form action="/classify" method="post" enctype="multipart/form-data">
+            <label for="model">Modelo:</label>
+            <select name="model" id="model">
+                <option value="Modelo_S_Data_Augmentation">Modelo Scratch com Data Augmentation</option>
+                <option value="Modelo_S">Modelo Scratch</option>
+            </select>
+            <br><br>
+            <input type="file" name="file" id="file">
+            <br><br>
+            <input type="submit" value="Classificar">
+        </form>
+        <div id="result"></div>
+    </div>
+   
 
     <script>
         document.querySelector('form').addEventListener('submit', async function(event) {
