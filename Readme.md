@@ -12,7 +12,7 @@ pip install flask
 ```
 ### Run the Program
 
-Run the application and open the local server in the Browser.
+Run the application and it will open a local server.
 ```
 python app.py
 ```
