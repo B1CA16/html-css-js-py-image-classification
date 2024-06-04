@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classificador de Imagens</title>
+    <title>Image Classifier</title>
 </head>
 <style>
     * {
@@ -30,6 +30,7 @@
         text-align: center;
         color: rgb(214, 214, 214);
         font-size: 20px;
+        position: relative;
     }
 
     .title {
@@ -81,7 +82,6 @@
         background-size: 12px;
     }
 
-    /* Remove default arrow in some browsers */
     select::-ms-expand {
         display: none;
     }
@@ -103,22 +103,65 @@
         height: 100%;
         object-fit: cover;
     }
+
+    .info-icon {
+        position: absolute;
+        bottom: 10px; 
+        right: 10px;
+        cursor: pointer;
+    }
+
+    .info-icon:hover .info-text {
+        display: block;
+    }
+
+    .info-text {
+        display: none;
+        position: absolute;
+        background-color: rgb(47, 47, 47);;
+        padding: 10px;
+        border-radius: 5px;
+        width: 400px;
+        top: 0;
+        left: 40px; 
+        z-index: 1;
+        font-size: 16px;
+        text-align: left;
+    }
+
+    .i {
+        padding: 3px 12px;
+        background-color: rgb(37, 37, 37);
+        border-radius: 100%;
+    }
+
+    .i:hover {
+        background-color: rgb(47, 47, 47);
+    }
 </style>
 <body>
     <div class="card">
-        <h1 class="title">Classificador de Imagens</h1>
+        <div class="info-icon">
+            <span class="i">i</span>
+            <span class="info-text">
+                These models were trained to classify 10 different classes:
+                <br>
+                Airplane, Automobile, Bird, Cat, Deer, Dog, Frog, Horse, Ship, Truck
+            </span>
+        </div>
+        <h1 class="title">Image Classifier</h1>
         <form action="/classify" method="post" enctype="multipart/form-data">
-            <label for="model">Modelo:</label>
+            <label for="model">Model:</label>
             <select name="model" id="model">
-                <option value="Modelo_S_Data_Augmentation">Modelo Scratch com Data Augmentation&nbsp&nbsp&nbsp</option>
-                <option value="Modelo_S">Modelo Scratch</option>
+                <option value="Modelo_S_Data_Augmentation">Scratch Model with Data Augmentation&nbsp&nbsp&nbsp</option>
+                <option value="Modelo_S">Scratch Model</option>
             </select>
             <br><br>
             <input type="file" name="file" id="file" onchange="previewImage(event)">
             <div class="image-preview" id="image-preview">
                 <img id="image-preview-img" src="" alt="Preview" style="display: none;">
             </div>
-            <input type="submit" value="Classificar" class="classificar">
+            <input type="submit" value="Classify" class="classificar">
         </form>
         
         <div id="result"></div>
@@ -152,7 +195,7 @@
                 body: formData
             });
             const result = await response.json();
-            document.getElementById('result').innerHTML = `Resultado: <b>${result.result}</b>`;
+            document.getElementById('result').innerHTML = `Result: <b>${result.result}</b>`;
         });
     </script>
 </body>
