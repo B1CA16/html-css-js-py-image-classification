@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classificador de Imagens</title>
-    <link rel="stylesheet" href="../style.css">
 </head>
 <style>
     * {
@@ -25,12 +24,12 @@
 
     .card {
         background-color: rgb(27, 27, 27);
-        padding: 40px;
+        padding: 40px 80px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         text-align: center;
         color: rgb(214, 214, 214);
-        font-size: 16px;
+        font-size: 20px;
     }
 
     .title {
@@ -38,21 +37,72 @@
         margin-bottom: 40px;
     }
 
-    input {
+    input[type="file"],
+    input[type="submit"],
+    select {
         border: 0;
         padding: .5rem 1rem;
         border-radius: 2rem;
         font-size: 16px;
+        margin-bottom: 20px;
+        background-color: rgb(37, 37, 37);
+        color: rgb(214, 214, 214);
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
     }
 
-    input:hover {
+    input[type="file"]:hover,
+    input[type="submit"]:hover,
+    select:hover {
         cursor: pointer;
+        background-color: rgb(47, 47, 47);
+    }
+
+    .classificar {
+        background-color: white !important;
+        color: black !important;
+        margin-top: 20px;
+    }
+
+    .classificar:hover {
+        background-color: rgb(212, 212, 212) !important;
     }
 
     #result {
         margin-top: 20px;
+        font-size: 20px;
     }
 
+    select {
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBkPSJNOCwxMEwxLDMuOTlMMi40MSwyLjU5TDEwLDExbDcuNTktNy41OUwxNSwzLjk5TDgsMTBaIiBmaWxsPSIjZGRkZGRkIi8+PC9zdmc+');
+        background-repeat: no-repeat;
+        background-position: right 0.7rem center;
+        background-size: 12px;
+    }
+
+    /* Remove default arrow in some browsers */
+    select::-ms-expand {
+        display: none;
+    }
+
+    .image-preview {
+        width: 150px;
+        height: 150px;
+        margin: 20px auto;
+        background-color: rgb(37, 37, 37);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .image-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 </style>
 <body>
     <div class="card">
@@ -60,19 +110,40 @@
         <form action="/classify" method="post" enctype="multipart/form-data">
             <label for="model">Modelo:</label>
             <select name="model" id="model">
-                <option value="Modelo_S_Data_Augmentation">Modelo Scratch com Data Augmentation</option>
+                <option value="Modelo_S_Data_Augmentation">Modelo Scratch com Data Augmentation&nbsp&nbsp&nbsp</option>
                 <option value="Modelo_S">Modelo Scratch</option>
             </select>
             <br><br>
-            <input type="file" name="file" id="file">
-            <br><br>
-            <input type="submit" value="Classificar">
+            <input type="file" name="file" id="file" onchange="previewImage(event)">
+            <div class="image-preview" id="image-preview">
+                <img id="image-preview-img" src="" alt="Preview" style="display: none;">
+            </div>
+            <input type="submit" value="Classificar" class="classificar">
         </form>
+        
         <div id="result"></div>
     </div>
-   
 
     <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            const previewImg = document.getElementById('image-preview-img');
+            const previewContainer = document.getElementById('image-preview');
+
+            reader.onload = function() {
+                previewImg.src = reader.result;
+                previewImg.style.display = 'block';
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                previewImg.src = '';
+                previewImg.style.display = 'none';
+            }
+        }
+
         document.querySelector('form').addEventListener('submit', async function(event) {
             event.preventDefault();
             const formData = new FormData(event.target);
@@ -81,7 +152,7 @@
                 body: formData
             });
             const result = await response.json();
-            document.getElementById('result').innerText = `Resultado: ${result.result}`;
+            document.getElementById('result').innerHTML = `Resultado: <b>${result.result}</b>`;
         });
     </script>
 </body>
